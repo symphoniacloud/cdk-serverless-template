@@ -22,21 +22,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v6
 
       - name: Setup node
         uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
+          cache: 'npm'
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.ACTIONS_ROLE_ARN }}
           aws-region: us-east-1
 
       - name: Test
-        shell: bash
         run: >
           npm ci &&
           npm run local-checks &&
