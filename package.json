@@ -1,7 +1,12 @@
 {
   "name": "coffee-store-cdk",
   "version": "2026.1.0",
+  "description": "Walking skeleton AWS Lambda app using TypeScript, CDK, Vitest, and GitHub Actions",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/symphoniacloud/coffee-store-cdk.git"
+  },
   "engines": {
     "node": ">=24.0.0"
   },
