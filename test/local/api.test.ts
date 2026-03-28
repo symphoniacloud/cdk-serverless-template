@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
-import { handler } from '../../src/app/lambdaFunctions/api/lambda'
-import { EmptyLambdaFunctionURLEvent } from './testSupport'
+import { handler } from '../../src/app/lambdaFunctions/api/lambda.js'
+import { EmptyLambdaFunctionURLEvent } from './testSupport.js'
 
 test('lambda function should return expected message when no name passed', async () => {
   const result = await handler(EmptyLambdaFunctionURLEvent)

@@ -3,6 +3,8 @@
   "include": ["src/**/*.ts", "test/**/*.ts"],
   "compilerOptions": {
     "noEmit": true,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "module": "preserve",
+    "moduleResolution": "bundler"
   }
 }

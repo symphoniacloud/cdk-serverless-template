@@ -4,7 +4,7 @@ import { Construct } from 'constructs'
 import { Architecture, FunctionUrlAuthType, Runtime } from 'aws-cdk-lib/aws-lambda'
 import { NodejsFunction, SourceMapMode } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs'
-import { createStackProps } from './initSupport'
+import { createStackProps } from './initSupport.js'
 
 const DEFAULT_STACK_NAME = 'coffee-store-cdk'
 

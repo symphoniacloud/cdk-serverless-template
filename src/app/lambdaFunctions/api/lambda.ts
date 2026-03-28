@@ -1,4 +1,4 @@
-import { generateMessage } from '../../domain/messageGenerator'
+import { generateMessage } from '../../domain/messageGenerator.js'
 import { LambdaFunctionURLEvent, LambdaFunctionURLResult } from 'aws-lambda/trigger/lambda-function-url'
 
 export async function handler(event: LambdaFunctionURLEvent): Promise<LambdaFunctionURLResult> {
