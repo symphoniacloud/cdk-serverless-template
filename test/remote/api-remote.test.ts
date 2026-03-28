@@ -4,12 +4,11 @@ import {
   DeleteStackCommand,
   DescribeStacksCommand
 } from '@aws-sdk/client-cloudformation'
-import { exec } from 'child_process'
-import { promisify } from 'util'
-import { get } from 'https'
+import { exec } from 'node:child_process'
+import { promisify } from 'node:util'
+import { get } from 'node:https'
 
-// eslint-disable-next-line
-const isUsingEphemeralStack = !process.env.hasOwnProperty('STACK_NAME')
+const isUsingEphemeralStack = !('STACK_NAME' in process.env)
 let stackName: string
 let apiUrl: string
 
@@ -28,18 +27,14 @@ beforeAll(async () => {
     new DescribeStacksCommand({ StackName: stackName })
   )
 
-  // eslint-disable-next-line
-  // @ts-ignore
+  // @ts-expect-error - find() may return undefined but we expect the output to always be present
   apiUrl = cloudformationStacks.Stacks[0].Outputs.find((output) => output.OutputKey === 'ApiUrl').OutputValue
 
   console.log(`Using Coffee Store API at [${apiUrl}]`)
 })
 
 function generateEphemeralStackName(): string {
-  // eslint-disable-next-line no-prototype-builtins
-  const prefix = process.env.hasOwnProperty('STACK_NAME_PREFIX')
-    ? process.env['STACK_NAME_PREFIX']
-    : `coffee-store-it`
+  const prefix = 'STACK_NAME_PREFIX' in process.env ? process.env['STACK_NAME_PREFIX'] : `coffee-store-it`
   const now = new Date(),
     year = now.getFullYear(),
     month = twoCharacter(now.getMonth() + 1),

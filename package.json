@@ -41,7 +41,7 @@
     "lint-fix": "eslint --max-warnings=0 --fix \"{src,test}/**/*.{js,ts}\"",
     "format": "prettier --check \"{src,test}/**/*.{js,ts}\"",
     "local-tests": "vitest run --dir test/local",
-    "remote-tests": "vitest run --dir test/remote --config test/remote/vitest.config.mts",
+    "remote-tests": "vitest run --dir test/remote --config test/remote/vitest.config.ts",
     "deploy": "cd src/cdk && npx cdk deploy",
     "all": "npm run local-checks && npm run deploy && npm run remote-tests",
     "cdk-diff": "cd src/cdk && npx cdk diff",
