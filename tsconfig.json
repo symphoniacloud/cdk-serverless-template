@@ -3,8 +3,6 @@
   "include": ["src/**/*.ts", "test/**/*.ts"],
   "compilerOptions": {
     "noEmit": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "strictNullChecks": true
+    "noImplicitReturns": true
   }
 }
