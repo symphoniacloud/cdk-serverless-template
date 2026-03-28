@@ -1,6 +1,7 @@
 {
   "name": "coffee-store-cdk",
   "version": "2026.1.0",
+  "private": true,
   "engines": {
     "node": ">=24.0.0"
   },
@@ -29,12 +30,14 @@
     "vitest": "4.x"
   },
   "scripts": {
-    "local-checks": "npx tsc && npm run lint && npm run format && npm run local-tests",
-    "lint": "eslint --max-warnings=0 --fix-dry-run \"{src,test}/**/*.{js,ts}\"",
+    "local-checks": "tsc && npm run lint && npm run format && npm run local-tests",
+    "lint": "eslint --max-warnings=0 \"{src,test}/**/*.{js,ts}\"",
+    "lint-fix": "eslint --max-warnings=0 --fix \"{src,test}/**/*.{js,ts}\"",
     "format": "prettier --check \"{src,test}/**/*.{js,ts}\"",
-    "local-tests": "npx vitest run --dir test/local",
-    "remote-tests": "npx vitest run --dir test/remote --config test/remote/vitest.config.mts",
+    "local-tests": "vitest run --dir test/local",
+    "remote-tests": "vitest run --dir test/remote --config test/remote/vitest.config.mts",
     "deploy": "cd src/cdk && npx cdk deploy",
+    "all": "npm run local-checks && npm run deploy && npm run remote-tests",
     "cdk-diff": "cd src/cdk && npx cdk diff",
     "cdk-destroy": "cd src/cdk && npx cdk destroy",
     "precdk-command": "echo \"Running CDK with command: $npm_config_command\"",
