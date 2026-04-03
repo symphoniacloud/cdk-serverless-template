@@ -1,16 +1,16 @@
-# Coffee Store CDK
+# CDK Serverless Template
 
 This is a "walking skeleton" AWS Lambda app, using **TypeScript**, [**CDK**](https://aws.amazon.com/cdk/), [**Vitest**](https://vitest.dev), and [**GitHub Actions**](https://github.com/features/actions). It is fully
 deployable, includes tests, and has a Github Actions workflow that will perform remote tests on an ephemeral
 deployment in AWS.
 
-In other words you can use this repo as a basis for making your own TypeScript Lambda-based applications.
+In other words you can use this repo as a template for making your own TypeScript Lambda-based applications.
 
-## Other CDK examples
+## Other CDK templates
 
-This example is part of a collection of CDK examples I have created - others are as follows:
+This is one of a collection of CDK template projects I have created - others are as follows:
 
-* [CDK bare-bones app for TypeScript](https://github.com/symphoniacloud/cdk-bare-bones) - Base project for any TypeScript app using CDK for deployment to AWS. **Try this first if you are getting started with CDK.**
+* [CDK bare-bones template for TypeScript](https://github.com/symphoniacloud/cdk-bare-bones) - Base project for any TypeScript app using CDK for deployment to AWS. **Try this first if you are getting started with CDK.**
 * [Coffee Store Web Basic](https://github.com/symphoniacloud/coffee-store-web-basic) - Website hosting on AWS with CloudFront and S3
 * [Coffee Store Web Full](https://github.com/symphoniacloud/coffee-store-web-full) - A further extension of _Coffee Store Web Basic_ that is a real working demo of a production-ready website project, including TLS certificates, DNS hosting, Github Actions Workflows, multiple CDK environments (prod vs test vs dev)
 
@@ -25,11 +25,8 @@ To build the Lambda function, this example uses the [`NodejsFunction` CDK Constr
 
 ### "CDK as build tool"
 
-Using `NodejsFunction` makes CDK a build tool and not just a deployment tool. 
-Fellow old-timey developers like me might be concerned by this, however I feel like `NodejsFunction` is "good enough" for many small to medium size TS Lambda projects.
-
-If you'd like more control over your build process then swap `NodejsFunction` for the standard [CDK `Function` construct](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda.Function.html), 
-and add a _build_ phase to your project. To see an example of this, including a wrapper script for ESBuild, see the [earlier version of this project](https://github.com/symphoniacloud/coffee-store-cdk/tree/57a209a28be7eabe468125ea1d5dc0f81433fcd2).
+Using `NodejsFunction` makes CDK a build tool and not just a deployment tool. If you'd like more control over your build process then swap `NodejsFunction` for the standard [CDK `Function` construct](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda.Function.html), 
+and add a _build_ phase to your project. To see an example of this, including a wrapper script for ESBuild, see the [earlier version of this project](https://github.com/symphoniacloud/cdk-serverless-template/tree/57a209a28be7eabe468125ea1d5dc0f81433fcd2).
 
 ## Prerequisites
 
@@ -57,9 +54,9 @@ If successful, the end result will look something like this:
 ```
 
 The unit tests run entirely locally, and execute the code directly, i.e. they do not use local runtime simulators. For
-the reasoning behind this choice see https://blog.symphonia.io/posts/2020-08-19_serverless_testing .
+the reasoning behind this choice see [this article that I wrote](https://blog.symphonia.io/posts/2020-08-19_serverless_testing).
 
-Once you've run npm install once in the directory you won't need to again unless you need to update versions of dependencies.
+Once you've run npm install once in the directory you won't need to again unless you need to update dependencies.
 
 To deploy the application to AWS run the following:
 
@@ -70,19 +67,19 @@ $ npm run deploy
 If successful, the end result will look something like this:
 
 ```
- ✅  CoffeeStore (coffee-store-cdk)
+ ✅  CdkServerlessTemplate (cdk-serverless-template)
 
 ✨  Deployment time: 63.31s
 
 Outputs:
-CoffeeStore.ApiUrl = https://2mnu7mnuphryvz5io3dlbprsam0wmxqv.lambda-url.us-east-1.on.aws/
+CdkServerlessTemplate.ApiUrl = https://2mnu7mnuphryvz5io3dlbprsam0wmxqv.lambda-url.us-east-1.on.aws/
 Stack ARN:
-arn:aws:cloudformation:us-east-1:397589511426:stack/coffee-store-cdk/a8c8bb20-d852-11ef-afa7-0e0775607411
+arn:aws:cloudformation:us-east-1:397589511426:stack/cdk-serverless-template/a8c8bb20-d852-11ef-afa7-0e0775607411
 
 ✨  Total time: 67.13s
 ```
 
-That `CoffeeStore.ApiUrl` value is a public URL - access it with your browser and you should see a "Hello World" message.
+That `CdkServerlessTemplate.ApiUrl` value is a public URL - access it with your browser and you should see a "Hello World" message.
 
 For other commands, **including how to teardown**, see the [_Usage_ section of the bare-bones project README](https://github.com/symphoniacloud/cdk-bare-bones#usage).
 
@@ -93,7 +90,7 @@ For other commands, **including how to teardown**, see the [_Usage_ section of t
 
 ## Configuring the CloudFormation stack name
 
-By default the stack deployed to CloudFormation is named _coffee-store-cdk_. To change this either:
+By default the stack deployed to CloudFormation is named _cdk-serverless-template_. To change this either:
 
 * Set a `STACK_NAME` variable in a _.env_ file in your project root directory
 * Set a `STACK_NAME` environment variable before deploying
@@ -101,10 +98,12 @@ By default the stack deployed to CloudFormation is named _coffee-store-cdk_. To 
 E.g.
 
 ```shell
-$ STACK_NAME=my-coffee-store-cdk npm run deploy
+$ STACK_NAME=my-cdk-serverless-template npm run deploy
 ```
 
-If you specify `STACK_NAME` in .env **and** your environment then the environment takes precendence.
+Alternatively, change the value of `DEFAULT_STACK_NAME` in [_/src/multipleContexts/processEnvironment.ts_](/src/multipleContexts/processEnvironment.ts) .
+
+If you specify `STACK_NAME` in _.env_ **and** your environment then the environment takes precendence.
 
 ## Running remote tests
 
@@ -116,10 +115,10 @@ If you want to run the remote tests against a stack that has already been deploy
 or in your environment. E.g.
 
 ```shell
-$ STACK_NAME=my-coffee-store-cdk npm run remote-tests
+$ STACK_NAME=my-cdk-serverless-template npm run remote-tests
 ```
 
-If you don't specify `STACK_NAME` then the same default stack name, _coffee-store-cdk_, is used for remote tests (unless you use `STACK_NAME_PREFIX_FOR_REMOTE_TESTS` as explained in the next section.)
+If you don't specify `STACK_NAME` then the same default stack name, _cdk-serverless-template_, is used for remote tests (unless you set `STACK_NAME_PREFIX_FOR_REMOTE_TESTS` as explained in the next section.)
 
 If you want to run remote tests via the IDE:
 
@@ -132,26 +131,26 @@ Alternatively the remote test can run against an _ephemeral_ stack - i.e. a new 
 test setup, and then torn down as part of test cleanup. Not surprisingly this method takes longer to run! To use this method specify a `STACK_NAME_PREFIX_FOR_REMOTE_TESTS` variable, either in a _.env_ file in your project root directory, or in your environment. E.g. :
 
 ```shell
-$ STACK_NAME_PREFIX_FOR_REMOTE_TESTS=my-coffee-store-cdk-test-stack npm run remote-tests
+$ STACK_NAME_PREFIX_FOR_REMOTE_TESTS=my-cdk-serverless-template-test-stack npm run remote-tests
 ```
 
 If you do so you'll see something like the following:
 
 ```
-> coffee-store-cdk@2026.1.0 remote-tests
+> cdk-serverless-template@2026.1.0 remote-tests
 > vitest run --dir test/remote --config test/remote/vitest.config.ts
 
 
- RUN  v4.1.2 /Users/mike/src/symphonia/mike/coffee-store-cdk
+ RUN  v4.1.2 /Users/mike/src/symphonia/mike/cdk-serverless-template
 
 stdout | test/remote/api-remote.test.ts
-Starting cloudformation deployment of stack my-coffee-store-cdk-test-stack-20260403-145310
+Starting cloudformation deployment of stack my-cdk-serverless-template-test-stack-20260403-145310
 ```
 
 and a little later you will see:
 
 ```
-Calling cloudformation to delete stack my-coffee-store-cdk-test-stack-20260403-145310
+Calling cloudformation to delete stack my-cdk-serverless-template-test-stack-20260403-145310
 
  ✓ test/remote/api-remote.test.ts (1 test) 47349ms
    ✓ API should return 200 exit code and expected content  374ms
@@ -187,7 +186,7 @@ You might choose to update the workflow to also deploy a non-ephemeral version o
 
 ## Questions / Feedback / etc.
 
-If you have questions related to this example please add a Github issue, or drop me a line
+If you have questions related to this template please add a Github issue, or drop me a line
 at [mike@symphonia.io](mailto:mike@symphonia.io) . I'm also on Mastodon at http://hachyderm.io/@mikebroberts and BlueSky at https://bsky.app/profile/mikebroberts.com .
 
 ## Previous Versions
@@ -204,6 +203,14 @@ This version contains the following changes since the 2020 version, plus several
 * Uses a Lambda Function URL instead of API Gateway
 
 ## Changelog
+
+### 2026.2
+
+* Switched to ES Modules (ESM)
+* Changed stack name logic
+* Updated dependencies
+* Tightened up metadata files
+* Renamed to "cdk-serverless-template" from "coffee-store-cdk"
 
 ### 2026.1
 

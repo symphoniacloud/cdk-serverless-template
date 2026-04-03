@@ -1,17 +1,17 @@
 {
-  "name": "coffee-store-cdk",
+  "name": "cdk-serverless-template",
   "version": "2026.2.0",
   "description": "Walking skeleton AWS Lambda app using TypeScript, CDK, Vitest, and GitHub Actions",
   "private": true,
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/symphoniacloud/coffee-store-cdk.git"
+    "url": "https://github.com/symphoniacloud/cdk-serverless-template.git"
   },
   "engines": {
     "node": ">=24.0.0"
   },
-  "homepage": "https://github.com/symphoniacloud/coffee-store-cdk",
+  "homepage": "https://github.com/symphoniacloud/cdk-serverless-template",
   "license": "MIT",
   "author": {
     "email": "mike@symphonia.io",

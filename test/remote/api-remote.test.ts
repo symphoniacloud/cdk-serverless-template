@@ -51,7 +51,7 @@ beforeAll(async () => {
   // @ts-expect-error - find() may return undefined but we expect the output to always be present
   apiUrl = cloudformationStacks.Stacks[0].Outputs.find((output) => output.OutputKey === 'ApiUrl').OutputValue
 
-  console.log(`Using Coffee Store API at [${apiUrl}]`)
+  console.log(`Using CdkServerlessTemplate API at [${apiUrl}]`)
 })
 
 function generateEphemeralStackName(prefix: string): string {

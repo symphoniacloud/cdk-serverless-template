@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: >
-  github-aws-oidc resources, as used by Coffee Store.
-  See https://github.com/symphoniacloud/coffee-store-cdk/blob/main/github-actions-prereqs/template.yaml
+  github-aws-oidc resources, as used by CDK Serverless Template.
+  See https://github.com/symphoniacloud/cdk-serverless-template/blob/main/github-actions-prereqs/template.yaml
 
 Parameters:
   GithubOrganization:

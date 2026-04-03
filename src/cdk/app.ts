@@ -9,7 +9,7 @@ import { DEFAULT_STACK_NAME, loadDotEnv } from '../multipleContexts/processEnvir
 
 loadDotEnv('../../')
 
-class CoffeeStoreStack extends Stack {
+class CdkServerlessTemplateStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props)
 
@@ -43,4 +43,4 @@ class CoffeeStoreStack extends Stack {
 }
 
 const app = new App()
-new CoffeeStoreStack(app, 'CoffeeStore', createStackProps(app, DEFAULT_STACK_NAME))
+new CdkServerlessTemplateStack(app, 'CdkServerlessTemplate', createStackProps(app, DEFAULT_STACK_NAME))

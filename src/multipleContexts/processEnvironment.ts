@@ -3,7 +3,7 @@ import { parseEnv } from 'node:util'
 
 // This needs to be here, and not in app.ts, because loading app.ts has side effects - i.e. running CDK
 //  and we also want to use this from remote test
-export const DEFAULT_STACK_NAME = 'coffee-store-cdk'
+export const DEFAULT_STACK_NAME = 'cdk-serverless-template'
 
 export function loadDotEnv(pathPrefix?: string) {
   try {
