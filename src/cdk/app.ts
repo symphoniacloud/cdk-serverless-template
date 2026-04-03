@@ -5,8 +5,9 @@ import { Architecture, FunctionUrlAuthType, Runtime } from 'aws-cdk-lib/aws-lamb
 import { NodejsFunction, SourceMapMode } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs'
 import { createStackProps } from './initSupport.js'
+import { DEFAULT_STACK_NAME, loadDotEnv } from '../multipleContexts/processEnvironment'
 
-const DEFAULT_STACK_NAME = 'coffee-store-cdk'
+loadDotEnv('../../')
 
 class CoffeeStoreStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {

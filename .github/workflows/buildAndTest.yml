@@ -41,4 +41,4 @@ jobs:
         run: >
           npm ci &&
           npm run local-checks &&
-          STACK_NAME_PREFIX=coffee-store-ci npm run remote-tests
+          STACK_NAME_PREFIX_FOR_REMOTE_TESTS=coffee-store-ci npm run remote-tests

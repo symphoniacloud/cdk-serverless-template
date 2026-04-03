@@ -1,3 +1,4 @@
+import { promisify } from 'node:util'
 import { afterAll, beforeAll, expect, test } from 'vitest'
 import {
   CloudFormationClient,
@@ -5,19 +6,39 @@ import {
   DescribeStacksCommand
 } from '@aws-sdk/client-cloudformation'
 import { exec } from 'node:child_process'
-import { promisify } from 'node:util'
 import { get } from 'node:https'
 
-const isUsingEphemeralStack = !('STACK_NAME' in process.env)
+import { DEFAULT_STACK_NAME, loadDotEnv } from '../../src/multipleContexts/processEnvironment'
+
+let isUsingEphemeralStack: boolean
 let stackName: string
 let apiUrl: string
 
 beforeAll(async () => {
-  stackName = isUsingEphemeralStack ? generateEphemeralStackName() : (process.env['STACK_NAME'] as string)
+  loadDotEnv()
+  const environmentStackName = process.env['STACK_NAME']
+  const environmentStackNamePrefix = process.env['STACK_NAME_PREFIX_FOR_REMOTE_TESTS']
+
+  if (environmentStackName && environmentStackNamePrefix) {
+    console.log(
+      '*** Both STACK_NAME and STACK_NAME_PREFIX_FOR_REMOTE_TESTS are set in environment - STACK_NAME_PREFIX_FOR_REMOTE_TESTS takes priority ***'
+    )
+    console.log(
+      '*** To run remote tests against STACK_NAME then remove STACK_NAME_PREFIX_FOR_REMOTE_TESTS from environment ***'
+    )
+  }
+
+  if (environmentStackNamePrefix === undefined) {
+    isUsingEphemeralStack = false
+    stackName = environmentStackName ?? DEFAULT_STACK_NAME
+  } else {
+    isUsingEphemeralStack = true
+    stackName = generateEphemeralStackName(environmentStackNamePrefix)
+  }
 
   if (isUsingEphemeralStack) {
     console.log(`Starting cloudformation deployment of stack ${stackName}`)
-    const { stdout } = await promisify(exec)(`npm run deploy -- --context stackName=${stackName}`)
+    const { stdout } = await promisify(exec)(`STACK_NAME=${stackName} npm run deploy`)
     console.log(stdout)
   } else {
     console.log(`Using existing stack ${stackName} as application target`)
@@ -33,8 +54,7 @@ beforeAll(async () => {
   console.log(`Using Coffee Store API at [${apiUrl}]`)
 })
 
-function generateEphemeralStackName(): string {
-  const prefix = 'STACK_NAME_PREFIX' in process.env ? process.env['STACK_NAME_PREFIX'] : `coffee-store-it`
+function generateEphemeralStackName(prefix: string): string {
   const now = new Date(),
     year = now.getFullYear(),
     month = twoCharacter(now.getMonth() + 1),

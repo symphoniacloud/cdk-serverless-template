@@ -1,11 +1,8 @@
 import { App, Environment, StackProps } from 'aws-cdk-lib'
 
-// Generic functions to help with stack initialization
-
-interface StackPropsWithAccountRegionAndStackName extends StackProps {
-  env: Required<Environment>
-  stackName: string
-}
+type StackPropsWithAccountRegionAndStackName =
+  | Required<Pick<StackProps, 'env' | 'stackName'>>
+  | Omit<StackProps, 'env' | 'stackName'>
 
 /**
  * Generates stack properties based on a default stack name and current AWS environment
@@ -23,10 +20,10 @@ export function createStackProps(
 /**
  * @param app The CDK app instance
  * @param defaultStackName default stack name
- * @return defaultStackName, unless stackName is specified in app context, in which case that is returned instead
+ * @return defaultStackName, unless stackName is specified in app context or STACK_NAME env var, in which case that is returned instead
  */
 export function calcStackName(app: App, defaultStackName: string) {
-  return app.node.tryGetContext('stackName') || defaultStackName
+  return app.node.tryGetContext('stackName') || process.env.STACK_NAME || defaultStackName
 }
 
 /**

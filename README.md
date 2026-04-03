@@ -91,74 +91,86 @@ For other commands, **including how to teardown**, see the [_Usage_ section of t
 * Install dependencies with `npm install`, or your IDE's Node support.
 * Run unit tests by running all tests under _/test/local_.
 
+## Configuring the CloudFormation stack name
+
+By default the stack deployed to CloudFormation is named _coffee-store-cdk_. To change this either:
+
+* Set a `STACK_NAME` variable in a _.env_ file in your project root directory
+* Set a `STACK_NAME` environment variable before deploying
+
+E.g.
+
+```shell
+$ STACK_NAME=my-coffee-store-cdk npm run deploy
+```
+
+If you specify `STACK_NAME` in .env **and** your environment then the environment takes precendence.
+
 ## Running remote tests
 
 This project includes a remote test which calls the deployed app in AWS via https and validates the response.
 
 ### Running remote tests targeting a stack that has already been deployed
 
-If you want to run the remote tests against a stack that has already been deployed **you should specify the stack's name with
-the `STACK_NAME` environment variable**, e.g.:
+If you want to run the remote tests against a stack that has already been deployed then specify `STACK_NAME` in the same way as you do for deployment, as explained above, either in a _.env_ file
+or in your environment. E.g.
 
 ```shell
-$ STACK_NAME=coffee-store-cdk npm run remote-tests
+$ STACK_NAME=my-coffee-store-cdk npm run remote-tests
 ```
+
+If you don't specify `STACK_NAME` then the same default stack name, _coffee-store-cdk_, is used for remote tests (unless you use `STACK_NAME_PREFIX_FOR_REMOTE_TESTS` as explained in the next section.)
 
 If you want to run remote tests via the IDE:
 
 * Use the vitest configuration at _/test/remote/vitest.config.ts_
-* make sure to specify the `STACK_NAME` environment variable as part of your test runner configuration if you want to use a
-  pre-deployed stack.
+* Make sure to specify the `STACK_NAME` environment variable either in your environment or _.env_ file
 
 ### Running remote tests targeting an ephemeral stack
 
 Alternatively the remote test can run against an _ephemeral_ stack - i.e. a new stack will be deployed as part of
-test setup, and then torn down as part of test cleanup. Not surprisingly this method takes a lot longer to run! To use this method **don't**
-specify a `STACK_NAME` value in the environment.
+test setup, and then torn down as part of test cleanup. Not surprisingly this method takes longer to run! To use this method specify a `STACK_NAME_PREFIX_FOR_REMOTE_TESTS` variable, either in a _.env_ file in your project root directory, or in your environment. E.g. :
 
-E.g. if you run `npm run remote-tests` **with no** `STACK_NAME` you will see something like the following in the console output
-while the remote test is being run:
+```shell
+$ STACK_NAME_PREFIX_FOR_REMOTE_TESTS=my-coffee-store-cdk-test-stack npm run remote-tests
+```
+
+If you do so you'll see something like the following:
 
 ```
-> coffee-store-cdk@2025.1.0 remote-tests
-> npx vitest run --dir test/remote --config test/remote/vitest.config.mts
+> coffee-store-cdk@2026.1.0 remote-tests
+> vitest run --dir test/remote --config test/remote/vitest.config.ts
 
 
- RUN  v3.0.3 [PATH_HERE]/coffee-store-cdk
+ RUN  v4.1.2 /Users/mike/src/symphonia/mike/coffee-store-cdk
 
 stdout | test/remote/api-remote.test.ts
-Starting cloudformation deployment of stack coffee-store-it-20250121-191154
+Starting cloudformation deployment of stack my-coffee-store-cdk-test-stack-20260403-145310
 ```
 
 and a little later you will see:
 
 ```
-stdout | test/remote/api-remote.test.ts
-Calling cloudformation to delete stack coffee-store-it-20250121-191154
+Calling cloudformation to delete stack my-coffee-store-cdk-test-stack-20260403-145310
 
- ✓ test/remote/api-remote.test.ts (1 test) 70204ms
-   ✓ API should return 200 exit code and expected content 355ms
+ ✓ test/remote/api-remote.test.ts (1 test) 47349ms
+   ✓ API should return 200 exit code and expected content  374ms
 
  Test Files  1 passed (1)
       Tests  1 passed (1)
-   Start at  19:11:54
-   Duration  70.52s (transform 29ms, setup 0ms, collect 81ms, tests 70.20s, environment 0ms, prepare 56ms)
+   Start at  14:53:10
+   Duration  47.50s (transform 20ms, setup 0ms, import 73ms, tests 47.35s, environment 0ms)
 ```
 
-#### Modifying the ephemeral stack name used
-
-The example above shows the test creating a stack named `stack coffee-store-it-20250121-191154`. If you want an
-alternative to the start of the name being `coffee-store-it` you can specify
-the `STACK_NAME_PREFIX` environment variable when running the remote test.
+NB: If you specify **both** `STACK_NAME` and `STACK_NAME_PREFIX_FOR_REMOTE_TESTS` through a combination of your .env file and environment when running remote tests, then `STACK_NAME_PREFIX_FOR_REMOTE_TESTS` takes priority, and therefore an ephemeral stack is used. If
+you want to use your fixed stack then remove `STACK_NAME_PREFIX_FOR_REMOTE_TESTS` from your environment.
 
 ## Continuous integration automation
 
 ### Github Actions Prerequisites
 
 The included Github Actions workflow at [.github/workflows/buildAndTest.yml](.github/workflows/buildAndTest.yml) will
-run all tests. Since these tests include the remote tests, the workflow will (indirectly) deploy
-an ephemeral version of the application to AWS, and therefore the Github Actions workflow needs permission to access
-your AWS account.
+run all tests. For the remote tests a `STACK_NAME_PREFIX_FOR_REMOTE_TESTS` environment variable is specified, and therefore the workflow will deploy an ephemeral stack. This means the Github Actions workflow needs permission to access your AWS account.
 
 For instructions on how to setup these permissions,
 see [github-actions-prereqs/README.md](github-actions-prereqs/README.md).
