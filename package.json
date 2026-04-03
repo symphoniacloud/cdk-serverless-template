@@ -1,6 +1,6 @@
 {
   "name": "coffee-store-cdk",
-  "version": "2026.1.0",
+  "version": "2026.2.0",
   "description": "Walking skeleton AWS Lambda app using TypeScript, CDK, Vitest, and GitHub Actions",
   "private": true,
   "type": "module",
